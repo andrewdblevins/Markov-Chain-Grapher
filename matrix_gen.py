@@ -1,4 +1,18 @@
-
+###################################################################################################
+#
+#            matrix_gen.py
+#    By Andrew Blevins and Sara Smoot
+#
+#    usage: 
+#    >>>python matrix_gen.py <sorted_list_of_facts_in_tsv_format>
+#
+#    installation:
+#    the following package must be installed to render images:
+#    >>>sudo apt-get install python-yapgvb 
+#
+#    
+#
+#################################################################################################
 import csv
 import sys
 
@@ -17,7 +31,7 @@ csv.register_dialect('tsv',delimiter='\t', quoting=csv.QUOTE_NONE)
 states = []
 
 
-TIMED_OUT = 300
+TIMED_OUT = 1800
 
 
 
@@ -37,7 +51,7 @@ def sort_fact_to_state(fact):
     state = fact.fact_id
 
     if fact.fact_id == '101651' and fact.attr1 == 'panel':
-        return None
+        state =  (fact.cid,fact.date_time,'View Label') 
 
     if fact.fact_id == '101651' and fact.attr1 != 'panel':
         state =  (fact.cid,fact.date_time,'View Photostream')
@@ -73,7 +87,7 @@ def tally_transition(state1,state2,dt):
         states.append(state1)
     if state2 not in states:
         states.append(state2)
-#print (state1,state2,dt)
+#    print (state1,state2,dt)
     if dt > 1:
         transition_matrix[state1][state2]+=1
 
