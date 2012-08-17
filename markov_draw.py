@@ -6,6 +6,8 @@
 
 import yapgvb
 
+edge_min = .002
+
 def load_states():
     f = open('states.tsv')
     lines = f.readlines()
@@ -17,12 +19,10 @@ def load_data():
     lines = f.readlines()
     transition_matrix = [[float(y) for y in x.split('\t')] for x in lines]
     return transition_matrix 
-    
-if __name__ == '__main__':
-    g = yapgvb.Digraph('Markov_Chain')
-    
-    states = load_states()
-    transition_matrix = load_data()
+
+def draw_chain(states, transition_matrix):
+    g = yapgvb.Digraph('Markov Chain')
+
     m = len(transition_matrix)
     state_list = []
 
@@ -38,10 +38,20 @@ if __name__ == '__main__':
     for i in range(m):
         for j in range(m):
             p = transition_matrix[i][j]
-            if p!=0.0:
+            if p>edge_min:
                 edge=g.add_edge(state_list[i],state_list[j])
-                edge.label=str(p*100)+'%'
+                edge.label=str(round(p*100,1))+'%'
                 edge.labelfloat=False
 
     g.layout(yapgvb.engines.dot)
     g.render('MarkovChain.jpg')
+
+if __name__ == '__main__':
+    
+    states = load_states()
+    transition_matrix = load_data()
+
+    print states
+    print transition_matrix
+
+    draw_chain(states, transition_matrix)
